@@ -2,114 +2,94 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Piano Loop Coach V1</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Piano Loop Coach V1.1</title>
 <style>
 :root{
-  --bg:#f6f5f2; --card:#ffffff; --text:#191919; --muted:#6d6a66;
-  --line:#ddd9d3; --accent:#222; --soft:#ece9e4; --danger:#a32929; --ok:#2f6b49;
+  --bg:#f4f3ef; --card:#fff; --text:#1d1d1b; --muted:#716f69;
+  --line:#dedbd4; --accent:#222; --soft:#efede8; --danger:#a53a3a;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
-button,input,textarea,select{font:inherit}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,textarea{font:inherit}
 button{cursor:pointer}
-.wrap{max-width:1100px;margin:0 auto;padding:22px}
-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
-h1{font-size:24px;margin:0}.sub{color:var(--muted);font-size:13px;margin-top:5px}
-.grid{display:grid;grid-template-columns:330px 1fr;gap:18px}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}
-.section-title{font-weight:750;margin:0 0 12px;font-size:15px}
-.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+button:disabled{opacity:.45;cursor:not-allowed}
+.app{max-width:1100px;margin:0 auto;padding:22px}
+header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:18px}
+h1{font-size:25px;margin:0}
+.subtitle{font-size:13px;color:var(--muted);margin-top:5px}
+.grid{display:grid;grid-template-columns:320px 1fr;gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}
 .stack{display:grid;gap:10px}
-input,textarea,select{width:100%;border:1px solid var(--line);border-radius:11px;padding:10px 12px;background:#fff;color:var(--text)}
-textarea{min-height:85px;resize:vertical}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.section-title{font-size:15px;font-weight:800;margin:0 0 10px}
+input,textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:10px 12px;background:#fff;color:var(--text)}
+textarea{min-height:76px;resize:vertical}
 button{border:1px solid var(--line);background:#fff;border-radius:11px;padding:9px 12px;color:var(--text)}
 button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
 button.soft{background:var(--soft)}
 button.danger{color:var(--danger)}
-button:disabled{opacity:.45;cursor:not-allowed}
-.small{font-size:12px;color:var(--muted)}
-.song-list{display:grid;gap:8px;max-height:320px;overflow:auto}
-.song{border:1px solid var(--line);border-radius:12px;padding:10px;background:#fff}
+.small{font-size:12px;color:var(--muted);line-height:1.45}
+hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+.song-list,.measure-list,.recordings{display:grid;gap:8px}
+.song{width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px}
 .song.active{outline:2px solid var(--accent);outline-offset:-2px}
-.song-title{font-weight:700;font-size:14px}.song-meta{font-size:12px;color:var(--muted);margin-top:2px}
-.media-box{aspect-ratio:16/9;background:#111;border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#aaa}
-.media-box iframe,.media-box video,.media-box audio{width:100%;height:100%;border:0}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.timeline{margin-top:14px}
-.measure-list{display:grid;gap:8px;margin-top:10px}
+.song-title{font-weight:750;font-size:14px}
+.song-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.video{aspect-ratio:16/9;background:#111;border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#aaa}
+.video iframe{width:100%;height:100%;border:0}
+.time{font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted)}
 .measure{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px}
 .measure.active{background:var(--soft)}
-.badge{font-size:12px;border:1px solid var(--line);padding:4px 7px;border-radius:999px}
-.now{font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted)}
-.analysis{white-space:pre-wrap;line-height:1.6;background:#faf9f7;border:1px solid var(--line);border-radius:12px;padding:13px;min-height:120px}
-.recordings{display:grid;gap:8px}
-.rec{border:1px solid var(--line);border-radius:12px;padding:10px}
-.rec audio{width:100%;margin-top:7px}
-.tabs{display:flex;gap:8px;margin-bottom:12px}
-.tabs button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.hidden{display:none!important}
-.hr{height:1px;background:var(--line);margin:14px 0}
-.status{font-size:12px;color:var(--muted);min-height:18px}
-.kbd{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--soft);border-radius:6px;padding:2px 6px;font-size:11px}
-.notice{font-size:12px;line-height:1.5;background:#f8f7f4;border:1px dashed var(--line);border-radius:10px;padding:10px;color:var(--muted)}
-@media(max-width:800px){.grid{grid-template-columns:1fr}.wrap{padding:14px}.song-list{max-height:220px}}
+.badge{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:3px 7px;font-size:11px;color:var(--muted)}
+.rec{border:1px solid var(--line);border-radius:12px;padding:11px}
+.rec.active{outline:2px solid var(--accent);outline-offset:-2px}
+.rec audio{width:100%;margin-top:8px}
+.wave-wrap{margin-top:10px;border:1px solid var(--line);border-radius:10px;background:#faf9f7;padding:8px}
+canvas{width:100%;height:120px;display:block}
+.notice{font-size:12px;color:var(--muted);line-height:1.5;border:1px dashed var(--line);border-radius:11px;padding:10px;background:#faf9f7}
+.status{min-height:18px;font-size:12px;color:var(--muted)}
+@media(max-width:820px){.grid{grid-template-columns:1fr}.app{padding:14px}}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="app">
 <header>
   <div>
-    <h1>Piano Loop Coach <span class="badge">V1</span></h1>
-    <div class="sub">유튜브/내 파일을 마디 단위로 반복하고, 내 연주를 녹음해 비교하는 개인 연습 앱</div>
+    <h1>Piano Loop Coach <span class="badge">V1.1</span></h1>
+    <div class="subtitle">YouTube 구간 반복 · 내 연주 녹음 · A/B 번갈아 듣기 · 내 연주 파형</div>
   </div>
   <button id="persistBtn" class="soft">저장 보호 요청</button>
 </header>
 
 <div class="grid">
-  <aside class="panel">
+  <aside class="card">
     <div class="section-title">곡 보관함</div>
-    <div class="tabs">
-      <button id="tabYoutube" class="active">YouTube</button>
-      <button id="tabLocal">내 파일</button>
-    </div>
+    <input id="songTitle" placeholder="곡 제목">
+    <input id="composer" placeholder="작곡가 (선택)">
+    <input id="youtubeUrl" placeholder="YouTube 링크">
+    <textarea id="notes" placeholder="연습 메모 (선택)"></textarea>
+    <button id="addSong" class="primary">곡 추가</button>
 
-    <div id="youtubeForm" class="stack">
-      <input id="ytTitle" placeholder="곡 제목 (예: Chopin Nocturne Op.9 No.2)">
-      <input id="ytComposer" placeholder="작곡가 (선택)">
-      <input id="ytUrl" placeholder="YouTube 링크">
-      <textarea id="ytNotes" placeholder="연습 메모 / 버전 정보 (선택)"></textarea>
-      <button id="addYoutube" class="primary">곡 보관함에 추가</button>
-    </div>
-
-    <div id="localForm" class="stack hidden">
-      <input id="localTitle" placeholder="곡 제목">
-      <input id="localComposer" placeholder="작곡가 (선택)">
-      <input id="localFile" type="file" accept="audio/*,video/*">
-      <textarea id="localNotes" placeholder="연습 메모 (선택)"></textarea>
-      <button id="addLocal" class="primary">파일을 이 브라우저에 보관</button>
-    </div>
-
-    <div class="hr"></div>
+    <hr>
     <div id="songList" class="song-list"></div>
     <div id="libraryStatus" class="status"></div>
 
-    <div class="hr"></div>
+    <hr>
     <div class="row">
-      <button id="exportBtn">메타데이터 백업</button>
-      <label style="flex:1">
-        <input id="importFile" class="hidden" type="file" accept=".json,application/json">
-        <button id="importBtn" type="button" style="width:100%">백업 복원</button>
-      </label>
+      <button id="exportBtn">백업</button>
+      <button id="importBtn">복원</button>
+      <input id="importFile" type="file" accept=".json,application/json" hidden>
     </div>
+
     <div class="notice" style="margin-top:10px">
-      로컬 음원/영상은 IndexedDB에 저장됩니다. 같은 브라우저·같은 사이트 주소에서는 앱 파일을 업데이트해도 유지됩니다.
-      단, 브라우저 데이터 삭제/기기 변경/사이트 주소 변경 시 사라질 수 있습니다. JSON 백업은 곡 정보·마디·AI 분석만 포함하고 로컬 미디어 파일 자체는 포함하지 않습니다.
+      곡·마디·녹음은 이 브라우저에 저장됩니다. 같은 GitHub Pages 주소와 같은 브라우저에서는
+      <code>index.html</code>을 새 버전으로 교체해도 유지됩니다. 브라우저 데이터 삭제나 기기 변경 시에는 사라질 수 있습니다.
     </div>
   </aside>
 
   <main class="stack">
-    <section class="panel">
+    <section class="card">
       <div class="row" style="justify-content:space-between">
         <div>
           <div id="currentTitle" class="section-title" style="margin:0">곡을 선택하세요</div>
@@ -117,476 +97,742 @@ button:disabled{opacity:.45;cursor:not-allowed}
         </div>
         <button id="deleteSong" class="danger" disabled>곡 삭제</button>
       </div>
-      <div id="mediaBox" class="media-box" style="margin-top:12px">보관함에서 곡을 선택하세요</div>
-      <div class="toolbar">
+
+      <div id="videoBox" class="video" style="margin-top:12px">곡을 선택하세요</div>
+
+      <div class="row" style="margin-top:10px">
         <button id="playPause" disabled>재생 / 일시정지</button>
-        <button id="markStart" disabled>현재 위치 = 마디 시작</button>
-        <button id="markEnd" disabled>현재 위치 = 마디 끝</button>
-        <span id="timeLabel" class="now">00:00.0</span>
+        <button id="markStart" disabled>현재 = 마디 시작</button>
+        <button id="markEnd" disabled>현재 = 마디 끝</button>
+        <span id="timeLabel" class="time">00:00.0</span>
       </div>
 
-      <div class="timeline">
-        <div class="row">
-          <input id="measureName" placeholder="마디 이름 (예: 1마디, A-3)" style="flex:1;min-width:150px">
-          <input id="startSec" type="number" min="0" step="0.1" placeholder="시작 초" style="width:120px">
-          <input id="endSec" type="number" min="0" step="0.1" placeholder="끝 초" style="width:120px">
-          <button id="saveMeasure" class="primary" disabled>마디 저장</button>
-        </div>
-        <div id="measureList" class="measure-list"></div>
+      <div class="row" style="margin-top:12px">
+        <input id="measureName" placeholder="마디 이름 (예: 1마디, A-3)" style="flex:1;min-width:170px">
+        <input id="startSec" type="number" min="0" step="0.1" placeholder="시작 초" style="width:110px">
+        <input id="endSec" type="number" min="0" step="0.1" placeholder="끝 초" style="width:110px">
+        <button id="saveMeasure" class="primary" disabled>마디 저장</button>
       </div>
+
+      <div id="measureList" class="measure-list" style="margin-top:10px"></div>
     </section>
 
-    <section class="panel">
-      <div class="section-title">내 연주 녹음 & A/B 비교</div>
+    <section class="card">
+      <div class="section-title">내 연주 녹음 & 비교</div>
+      <div class="small" style="margin-bottom:10px">먼저 위에서 연습할 마디를 선택하세요.</div>
+
       <div class="row">
-        <button id="recordBtn" class="primary" disabled>● 녹음 시작</button>
+        <button id="recordBtn" class="primary" disabled>● 내 연주 녹음</button>
         <button id="stopRecordBtn" disabled>■ 녹음 종료</button>
-        <button id="playRefBtn" disabled>원본 구간 듣기</button>
-        <span id="recordStatus" class="status"></span>
+        <button id="playReferenceBtn" disabled>원본 듣기</button>
+        <button id="playMyTakeBtn" disabled>내 연주 듣기</button>
+        <button id="abBtn" disabled>원본 → 내 연주</button>
       </div>
-      <div class="small" style="margin:8px 0 12px">먼저 위에서 비교할 마디를 선택하세요. 마이크 권한은 HTTPS 또는 localhost에서만 정상 작동할 수 있습니다.</div>
+      <div id="recordStatus" class="status"></div>
+
       <div id="recordings" class="recordings"></div>
     </section>
-
-    <section class="panel">
-      <div class="section-title">AI 곡 분석</div>
-      <div class="stack">
-        <input id="apiKey" type="password" autocomplete="off" placeholder="Gemini API key (이 입력값은 저장하지 않음)">
-        <select id="level">
-          <option value="초급">초급</option>
-          <option value="중급" selected>중급</option>
-          <option value="고급">고급</option>
-        </select>
-        <textarea id="analysisQuestion" placeholder="궁금한 점 (선택) — 예: 이 구간에서 왼손 밸런스와 페달링을 어떻게 연습할까?"></textarea>
-        <div class="row">
-          <button id="analyzeBtn" class="primary" disabled>선택 곡/마디 분석</button>
-          <span class="small">프로토타입용: 키는 브라우저 메모리에만 두고 저장하지 않습니다.</span>
-        </div>
-        <div id="analysisStatus" class="status"></div>
-        <div id="analysisBox" class="analysis">곡을 선택한 뒤 AI 분석을 실행하세요. V1에서는 제목·작곡가·연습 메모·선택 마디 정보를 바탕으로 설명하며, 실제 음원을 AI가 듣고 채점하지는 않습니다.</div>
-      </div>
-    </section>
   </main>
+</div>
 </div>
 
 <script>
 (() => {
-  "use strict";
+"use strict";
 
-  const DB_NAME = "piano-loop-coach-v1";
-  const DB_VERSION = 1;
-  const SONGS = "songs";
-  const RECS = "recordings";
+const DB_NAME = "piano-loop-coach-v11";
+const DB_VERSION = 1;
+const SONGS = "songs";
+const RECS = "recordings";
 
-  let db;
-  let songs = [];
-  let currentSong = null;
-  let selectedMeasureId = null;
-  let ytPlayer = null;
-  let ytReady = false;
-  let localMedia = null;
-  let localObjectUrl = null;
-  let loopTimer = null;
-  let mediaRecorder = null;
-  let recChunks = [];
+let db = null;
+let songs = [];
+let currentSong = null;
+let selectedMeasureId = null;
+let selectedRecordingId = null;
 
-  const $ = id => document.getElementById(id);
-  const fmt = sec => {
-    sec = Number.isFinite(+sec) ? Math.max(0,+sec) : 0;
-    const m = Math.floor(sec/60);
-    const s = sec - m*60;
-    return `${String(m).padStart(2,"0")}:${s.toFixed(1).padStart(4,"0")}`;
-  };
-  const uid = () => crypto.randomUUID ? crypto.randomUUID() : (Date.now()+"-"+Math.random().toString(16).slice(2));
+let ytPlayer = null;
+let ytReady = false;
+let ticker = null;
+let looping = false;
+let abMode = false;
+let abEndTimer = null;
 
-  function setStatus(el, msg, ok=false){
-    el.textContent = msg || "";
-    el.style.color = ok ? "var(--ok)" : "var(--muted)";
-  }
+let mediaRecorder = null;
+let recordingStream = null;
+let chunks = [];
 
-  function openDB(){
-    return new Promise((resolve,reject)=>{
-      const req = indexedDB.open(DB_NAME, DB_VERSION);
-      req.onupgradeneeded = () => {
-        const d = req.result;
-        if(!d.objectStoreNames.contains(SONGS)) d.createObjectStore(SONGS,{keyPath:"id"});
-        if(!d.objectStoreNames.contains(RECS)){
-          const s = d.createObjectStore(RECS,{keyPath:"id"});
-          s.createIndex("songId","songId");
-          s.createIndex("measureId","measureId");
-        }
-      };
-      req.onsuccess=()=>resolve(req.result);
-      req.onerror=()=>reject(req.error);
-    });
-  }
+const $ = id => document.getElementById(id);
 
-  function store(name, mode="readonly"){ return db.transaction(name,mode).objectStore(name); }
-  function getAll(name){ return new Promise((res,rej)=>{const r=store(name).getAll();r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}); }
-  function put(name, val){ return new Promise((res,rej)=>{const r=store(name,"readwrite").put(val);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}); }
-  function del(name, key){ return new Promise((res,rej)=>{const r=store(name,"readwrite").delete(key);r.onsuccess=()=>res();r.onerror=()=>rej(r.error)}); }
+function uid() {
+  return crypto.randomUUID ? crypto.randomUUID() : (Date.now() + "-" + Math.random().toString(16).slice(2));
+}
 
-  function youtubeId(url){
-    try{
-      const u = new URL(url);
-      if(u.hostname.includes("youtu.be")) return u.pathname.slice(1).split("/")[0];
-      if(u.hostname.includes("youtube.com")){
-        if(u.pathname.startsWith("/shorts/")) return u.pathname.split("/")[2];
-        if(u.pathname.startsWith("/embed/")) return u.pathname.split("/")[2];
-        return u.searchParams.get("v");
+function fmt(sec) {
+  sec = Number.isFinite(+sec) ? Math.max(0, +sec) : 0;
+  const m = Math.floor(sec / 60);
+  const s = sec - m * 60;
+  return `${String(m).padStart(2,"0")}:${s.toFixed(1).padStart(4,"0")}`;
+}
+
+function esc(v) {
+  return String(v ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = () => {
+      const d = req.result;
+      if (!d.objectStoreNames.contains(SONGS)) {
+        d.createObjectStore(SONGS, {keyPath:"id"});
       }
-    }catch(e){}
-    return null;
+      if (!d.objectStoreNames.contains(RECS)) {
+        const r = d.createObjectStore(RECS, {keyPath:"id"});
+        r.createIndex("songId", "songId");
+        r.createIndex("measureId", "measureId");
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+function store(name, mode="readonly") {
+  return db.transaction(name, mode).objectStore(name);
+}
+function getAll(name) {
+  return new Promise((resolve,reject)=>{
+    const r=store(name).getAll();
+    r.onsuccess=()=>resolve(r.result);
+    r.onerror=()=>reject(r.error);
+  });
+}
+function put(name,value) {
+  return new Promise((resolve,reject)=>{
+    const r=store(name,"readwrite").put(value);
+    r.onsuccess=()=>resolve(r.result);
+    r.onerror=()=>reject(r.error);
+  });
+}
+function del(name,key) {
+  return new Promise((resolve,reject)=>{
+    const r=store(name,"readwrite").delete(key);
+    r.onsuccess=()=>resolve();
+    r.onerror=()=>reject(r.error);
+  });
+}
+
+function youtubeId(url) {
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes("youtu.be")) return u.pathname.slice(1).split("/")[0];
+    if (u.hostname.includes("youtube.com")) {
+      if (u.pathname.startsWith("/shorts/")) return u.pathname.split("/")[2];
+      if (u.pathname.startsWith("/embed/")) return u.pathname.split("/")[2];
+      return u.searchParams.get("v");
+    }
+  } catch(e) {}
+  return null;
+}
+
+function ensureYouTubeAPI() {
+  if (window.YT && window.YT.Player) return Promise.resolve();
+  return new Promise(resolve => {
+    const prev = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => {
+      if (typeof prev === "function") prev();
+      resolve();
+    };
+    if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+      const s = document.createElement("script");
+      s.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(s);
+    }
+  });
+}
+
+async function refreshSongs() {
+  songs = await getAll(SONGS);
+  if (currentSong) currentSong = songs.find(s => s.id === currentSong.id) || null;
+  renderSongs();
+}
+
+function renderSongs() {
+  const box = $("songList");
+  box.innerHTML = "";
+  if (!songs.length) {
+    box.innerHTML = '<div class="small">아직 저장한 곡이 없습니다.</div>';
+    return;
+  }
+  songs.sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
+  songs.forEach(s => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "song" + (currentSong?.id === s.id ? " active" : "");
+    btn.innerHTML = `
+      <div class="song-title">${esc(s.title)}</div>
+      <div class="song-meta">${esc(s.composer||"")} · ${(s.measures||[]).length}개 구간</div>`;
+    btn.addEventListener("click", () => selectSong(s.id));
+    box.appendChild(btn);
+  });
+}
+
+async function selectSong(id) {
+  const s = songs.find(x=>x.id===id);
+  if (!s) return;
+
+  currentSong = s;
+  selectedMeasureId = null;
+  selectedRecordingId = null;
+  looping = false;
+  abMode = false;
+  clearTimeout(abEndTimer);
+  clearInterval(ticker);
+
+  $("currentTitle").textContent = s.title;
+  $("currentMeta").textContent = [s.composer, "YouTube"].filter(Boolean).join(" · ");
+
+  ["deleteSong","playPause","markStart","markEnd","saveMeasure"].forEach(id=>$(id).disabled=false);
+  ["recordBtn","playReferenceBtn","playMyTakeBtn","abBtn"].forEach(id=>$(id).disabled=true);
+
+  renderSongs();
+  renderMeasures();
+  await renderRecordings();
+
+  $("videoBox").innerHTML = '<div id="ytPlayerHost" style="width:100%;height:100%"></div>';
+  await ensureYouTubeAPI();
+
+  ytReady = false;
+  ytPlayer = new YT.Player("ytPlayerHost", {
+    videoId:s.youtubeId,
+    playerVars:{playsinline:1,rel:0},
+    events:{
+      onReady:()=>{
+        ytReady=true;
+        startTicker();
+      }
+    }
+  });
+}
+
+function currentTime() {
+  if (!ytPlayer || !ytReady) return 0;
+  try { return Number(ytPlayer.getCurrentTime()) || 0; } catch(e) { return 0; }
+}
+
+function playYT() {
+  if (ytPlayer && ytReady) ytPlayer.playVideo();
+}
+function pauseYT() {
+  if (ytPlayer && ytReady) ytPlayer.pauseVideo();
+}
+function seekPlay(sec) {
+  if (ytPlayer && ytReady) {
+    ytPlayer.seekTo(Number(sec), true);
+    ytPlayer.playVideo();
+  }
+}
+
+function startTicker() {
+  clearInterval(ticker);
+  ticker = setInterval(() => {
+    const t = currentTime();
+    $("timeLabel").textContent = fmt(t);
+
+    const m = currentSong?.measures?.find(x=>x.id===selectedMeasureId);
+    if (looping && m && t >= Number(m.end) - 0.03) {
+      seekPlay(m.start);
+    }
+  }, 90);
+}
+
+function renderMeasures() {
+  const box = $("measureList");
+  box.innerHTML = "";
+  const arr = currentSong?.measures || [];
+  if (!arr.length) {
+    box.innerHTML = '<div class="small">아직 저장한 마디/구간이 없습니다.</div>';
+    return;
   }
 
-  function renderSongs(){
-    const box=$("songList");
-    box.innerHTML="";
-    if(!songs.length){ box.innerHTML='<div class="small">아직 저장한 곡이 없습니다.</div>'; return; }
-    songs.sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
-    songs.forEach(s=>{
-      const el=document.createElement("button");
-      el.type="button";
-      el.className="song"+(currentSong?.id===s.id?" active":"");
-      el.style.textAlign="left";
-      el.innerHTML=`<div class="song-title">${escapeHtml(s.title||"제목 없음")}</div>
-        <div class="song-meta">${escapeHtml(s.composer||"")} ${s.source==="youtube"?"· YouTube":"· Local file"} · ${(s.measures||[]).length}구간</div>`;
-      el.addEventListener("click",()=>selectSong(s.id));
-      box.appendChild(el);
+  arr.forEach((m,i)=>{
+    const el=document.createElement("div");
+    el.className="measure"+(selectedMeasureId===m.id?" active":"");
+    el.innerHTML=`
+      <button type="button" class="playMeasure">▶</button>
+      <div>
+        <b>${esc(m.name || `${i+1}마디`)}</b>
+        <div class="small">${fmt(m.start)} → ${fmt(m.end)} · ${(m.end-m.start).toFixed(1)}초</div>
+      </div>
+      <button type="button" class="danger deleteMeasure">×</button>
+    `;
+    el.querySelector(".playMeasure").addEventListener("click",()=>selectMeasure(m.id,true));
+    el.querySelector(".deleteMeasure").addEventListener("click",()=>deleteMeasure(m.id));
+    box.appendChild(el);
+  });
+}
+
+async function selectMeasure(id, play=false) {
+  selectedMeasureId = id;
+  selectedRecordingId = null;
+  looping = true;
+  abMode = false;
+  clearTimeout(abEndTimer);
+
+  renderMeasures();
+  await renderRecordings();
+
+  $("recordBtn").disabled = false;
+  $("playReferenceBtn").disabled = false;
+  $("playMyTakeBtn").disabled = true;
+  $("abBtn").disabled = true;
+
+  if (play) {
+    const m=currentSong.measures.find(x=>x.id===id);
+    seekPlay(m.start);
+  }
+}
+
+async function deleteMeasure(id) {
+  if (!currentSong) return;
+  currentSong.measures = (currentSong.measures||[]).filter(m=>m.id!==id);
+  currentSong.updatedAt = Date.now();
+
+  const recs = await getAll(RECS);
+  for (const r of recs.filter(r=>r.songId===currentSong.id && r.measureId===id)) {
+    await del(RECS,r.id);
+  }
+
+  if (selectedMeasureId === id) {
+    selectedMeasureId = null;
+    selectedRecordingId = null;
+    looping = false;
+  }
+
+  await put(SONGS,currentSong);
+  await refreshSongs();
+  renderMeasures();
+  await renderRecordings();
+}
+
+async function renderRecordings() {
+  const box = $("recordings");
+  box.innerHTML = "";
+
+  if (!currentSong || !selectedMeasureId) {
+    box.innerHTML='<div class="small">마디를 선택하면 해당 구간의 녹음이 표시됩니다.</div>';
+    return;
+  }
+
+  const all = await getAll(RECS);
+  const arr = all
+    .filter(r=>r.songId===currentSong.id && r.measureId===selectedMeasureId)
+    .sort((a,b)=>b.createdAt-a.createdAt);
+
+  if (!arr.length) {
+    box.innerHTML='<div class="small">아직 이 마디의 녹음이 없습니다.</div>';
+    return;
+  }
+
+  if (!selectedRecordingId) selectedRecordingId = arr[0].id;
+
+  for (const [idx,r] of arr.entries()) {
+    const el = document.createElement("div");
+    el.className = "rec" + (selectedRecordingId===r.id ? " active" : "");
+
+    const url = URL.createObjectURL(r.blob);
+    el.innerHTML = `
+      <div class="row" style="justify-content:space-between">
+        <div>
+          <b>Take ${arr.length-idx}</b>
+          <div class="small">${new Date(r.createdAt).toLocaleString()}</div>
+        </div>
+        <div class="row">
+          <button type="button" class="selectTake">선택</button>
+          <button type="button" class="danger deleteTake">삭제</button>
+        </div>
+      </div>
+      <audio controls preload="metadata"></audio>
+      <div class="wave-wrap">
+        <canvas width="900" height="160" aria-label="내 연주 파형"></canvas>
+      </div>
+    `;
+
+    const audio = el.querySelector("audio");
+    audio.src = url;
+    el.querySelector(".selectTake").addEventListener("click",()=>{
+      selectedRecordingId=r.id;
+      renderRecordings();
+      $("playMyTakeBtn").disabled=false;
+      $("abBtn").disabled=false;
     });
+    el.querySelector(".deleteTake").addEventListener("click",async()=>{
+      await del(RECS,r.id);
+      if(selectedRecordingId===r.id) selectedRecordingId=null;
+      URL.revokeObjectURL(url);
+      await renderRecordings();
+      updateCompareButtons();
+    });
+
+    box.appendChild(el);
+    drawWaveform(r.blob, el.querySelector("canvas"));
   }
 
-  function escapeHtml(v){
-    return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-  }
+  updateCompareButtons();
+}
 
-  async function refreshSongs(){
-    songs=await getAll(SONGS);
-    if(currentSong) currentSong=songs.find(s=>s.id===currentSong.id)||null;
-    renderSongs();
-  }
+function updateCompareButtons() {
+  const ok = !!selectedRecordingId && !!selectedMeasureId;
+  $("playMyTakeBtn").disabled = !ok;
+  $("abBtn").disabled = !ok;
+}
 
-  function cleanupMedia(){
-    clearInterval(loopTimer); loopTimer=null;
-    if(localObjectUrl){ URL.revokeObjectURL(localObjectUrl); localObjectUrl=null; }
-    localMedia=null;
-    if(ytPlayer && ytReady){ try{ytPlayer.stopVideo()}catch(e){} }
-    $("mediaBox").innerHTML="";
-  }
+async function drawWaveform(blob, canvas) {
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  async function selectSong(id){
-    const s=songs.find(x=>x.id===id); if(!s)return;
-    currentSong=s; selectedMeasureId=null;
-    cleanupMedia();
-    $("currentTitle").textContent=s.title||"제목 없음";
-    $("currentMeta").textContent=[s.composer,s.source==="youtube"?"YouTube":"내 파일"].filter(Boolean).join(" · ");
-    $("deleteSong").disabled=false;
-    $("saveMeasure").disabled=false;
-    $("analyzeBtn").disabled=false;
-    $("playPause").disabled=false;
-    $("markStart").disabled=false;
-    $("markEnd").disabled=false;
+  try {
+    const arr = await blob.arrayBuffer();
+    const ac = new (window.AudioContext || window.webkitAudioContext)();
+    const buffer = await ac.decodeAudioData(arr.slice(0));
+    const data = buffer.getChannelData(0);
+
+    const width = canvas.width;
+    const height = canvas.height;
+    const mid = height/2;
+    const samplesPerPixel = Math.max(1, Math.floor(data.length/width));
+
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "#222";
+    ctx.beginPath();
+
+    for(let x=0;x<width;x++){
+      const start=x*samplesPerPixel;
+      const end=Math.min(data.length,start+samplesPerPixel);
+      let min=1,max=-1;
+      for(let i=start;i<end;i++){
+        const v=data[i];
+        if(v<min)min=v;
+        if(v>max)max=v;
+      }
+      const y1=mid+min*mid*0.86;
+      const y2=mid+max*mid*0.86;
+      ctx.moveTo(x,y1);
+      ctx.lineTo(x,y2);
+    }
+    ctx.stroke();
+
+    ctx.strokeStyle="#bbb";
+    ctx.beginPath();
+    ctx.moveTo(0,mid);
+    ctx.lineTo(width,mid);
+    ctx.stroke();
+
+    ac.close();
+  } catch(e) {
+    ctx.fillStyle="#777";
+    ctx.font="16px sans-serif";
+    ctx.fillText("파형을 표시할 수 없습니다.",20,30);
+  }
+}
+
+async function startRecording() {
+  if (!selectedMeasureId) return;
+
+  try {
+    recordingStream = await navigator.mediaDevices.getUserMedia({
+      audio:{
+        echoCancellation:false,
+        noiseSuppression:false,
+        autoGainControl:false
+      }
+    });
+
+    chunks = [];
+    mediaRecorder = new MediaRecorder(recordingStream);
+
+    mediaRecorder.ondataavailable = e => {
+      if (e.data.size) chunks.push(e.data);
+    };
+
+    mediaRecorder.onstop = async () => {
+      const blob = new Blob(chunks,{type:mediaRecorder.mimeType || "audio/webm"});
+      const rec = {
+        id:uid(),
+        songId:currentSong.id,
+        measureId:selectedMeasureId,
+        createdAt:Date.now(),
+        blob
+      };
+      await put(RECS,rec);
+      selectedRecordingId = rec.id;
+
+      recordingStream.getTracks().forEach(t=>t.stop());
+      recordingStream = null;
+
+      $("recordBtn").disabled=false;
+      $("stopRecordBtn").disabled=true;
+      $("recordStatus").textContent="녹음 저장 완료";
+      await renderRecordings();
+    };
+
+    mediaRecorder.start();
     $("recordBtn").disabled=true;
-    $("playRefBtn").disabled=true;
-    $("analysisBox").textContent=s.analysis||"아직 AI 분석이 없습니다.";
-    renderSongs();
-    renderMeasures();
-    await renderMedia(s);
-    await renderRecordings();
+    $("stopRecordBtn").disabled=false;
+    $("recordStatus").textContent="녹음 중…";
+  } catch(e) {
+    $("recordStatus").textContent="마이크 권한을 사용할 수 없습니다. GitHub Pages(HTTPS)에서 마이크 권한을 허용해 주세요.";
   }
+}
 
-  async function renderMedia(s){
-    const box=$("mediaBox");
-    if(s.source==="youtube"){
-      const holder=document.createElement("div");
-      holder.id="ytPlayerHost"; holder.style.width="100%"; holder.style.height="100%";
-      box.appendChild(holder);
-      await ensureYouTubeAPI();
-      ytReady=false;
-      ytPlayer=new YT.Player("ytPlayerHost",{
-        videoId:s.youtubeId,
-        playerVars:{playsinline:1,rel:0},
-        events:{onReady:()=>{ytReady=true; startTimeWatcher();}}
-      });
-    }else{
-      if(!s.mediaBlob){ box.textContent="로컬 파일 데이터가 없습니다. 다시 추가해 주세요."; return; }
-      localObjectUrl=URL.createObjectURL(s.mediaBlob);
-      const isVideo=(s.mediaType||"").startsWith("video/");
-      localMedia=document.createElement(isVideo?"video":"audio");
-      localMedia.controls=true; localMedia.preload="metadata"; localMedia.src=localObjectUrl;
-      if(!isVideo){ box.style.aspectRatio="auto"; box.style.minHeight="110px"; }
-      else { box.style.aspectRatio="16/9"; box.style.minHeight="0"; }
-      box.appendChild(localMedia);
-      startTimeWatcher();
-    }
-  }
+function stopRecording() {
+  if (mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
+}
 
-  function ensureYouTubeAPI(){
-    if(window.YT && window.YT.Player) return Promise.resolve();
-    return new Promise(resolve=>{
-      const existing=document.querySelector('script[src*="youtube.com/iframe_api"]');
-      const old=window.onYouTubeIframeAPIReady;
-      window.onYouTubeIframeAPIReady=()=>{ if(typeof old==="function") old(); resolve(); };
-      if(!existing){
-        const s=document.createElement("script");
-        s.src="https://www.youtube.com/iframe_api";
-        document.head.appendChild(s);
-      }
-    });
-  }
+async function getSelectedRecording() {
+  if (!selectedRecordingId) return null;
+  const all = await getAll(RECS);
+  return all.find(r=>r.id===selectedRecordingId) || null;
+}
 
-  function getCurrentTime(){
-    if(!currentSong) return 0;
-    if(currentSong.source==="youtube" && ytPlayer && ytReady){
-      try{return Number(ytPlayer.getCurrentTime())||0}catch(e){return 0}
-    }
-    return localMedia ? (Number(localMedia.currentTime)||0) : 0;
-  }
+async function playMyTake() {
+  const rec = await getSelectedRecording();
+  if (!rec) return;
+  looping = false;
+  pauseYT();
+  const url = URL.createObjectURL(rec.blob);
+  const a = new Audio(url);
+  a.onended = () => URL.revokeObjectURL(url);
+  a.play();
+}
 
-  function playPause(){
-    if(!currentSong)return;
-    if(currentSong.source==="youtube" && ytPlayer && ytReady){
-      const st=ytPlayer.getPlayerState();
-      st===1 ? ytPlayer.pauseVideo() : ytPlayer.playVideo();
-    }else if(localMedia){
-      localMedia.paused ? localMedia.play() : localMedia.pause();
-    }
-  }
+function playReferenceOnce(onDone=null) {
+  const m=currentSong?.measures?.find(x=>x.id===selectedMeasureId);
+  if (!m) return;
 
-  function seekPlay(sec){
-    if(currentSong.source==="youtube" && ytPlayer && ytReady){
-      ytPlayer.seekTo(sec,true); ytPlayer.playVideo();
-    }else if(localMedia){
-      localMedia.currentTime=sec; localMedia.play();
-    }
-  }
-  function pauseMedia(){
-    if(currentSong?.source==="youtube" && ytPlayer && ytReady) ytPlayer.pauseVideo();
-    else if(localMedia) localMedia.pause();
-  }
+  looping=false;
+  seekPlay(m.start);
+  clearTimeout(abEndTimer);
 
-  function startTimeWatcher(){
-    clearInterval(loopTimer);
-    loopTimer=setInterval(()=>{
-      $("timeLabel").textContent=fmt(getCurrentTime());
-      const m=(currentSong?.measures||[]).find(x=>x.id===selectedMeasureId);
-      if(m){
-        const t=getCurrentTime();
-        if(t>=Number(m.end)-0.03) seekPlay(Number(m.start));
-      }
-    },90);
-  }
+  const duration=Math.max(0.1,(m.end-m.start))*1000;
+  abEndTimer=setTimeout(()=>{
+    pauseYT();
+    if(typeof onDone==="function") onDone();
+  },duration);
+}
 
-  function renderMeasures(){
-    const box=$("measureList"); box.innerHTML="";
-    const arr=currentSong?.measures||[];
-    if(!arr.length){ box.innerHTML='<div class="small">아직 저장한 마디/구간이 없습니다.</div>'; return; }
-    arr.forEach((m,i)=>{
-      const el=document.createElement("div");
-      el.className="measure"+(selectedMeasureId===m.id?" active":"");
-      el.innerHTML=`<button type="button" data-play="${m.id}">▶</button>
-        <div><b>${escapeHtml(m.name||`${i+1}마디`)}</b><div class="small">${fmt(m.start)} → ${fmt(m.end)} · ${(m.end-m.start).toFixed(1)}초</div></div>
-        <button type="button" class="danger" data-del="${m.id}">×</button>`;
-      el.querySelector("[data-play]").addEventListener("click",()=>selectMeasure(m.id,true));
-      el.querySelector("[data-del]").addEventListener("click",()=>deleteMeasure(m.id));
-      box.appendChild(el);
-    });
-  }
+async function playAB() {
+  const rec=await getSelectedRecording();
+  const m=currentSong?.measures?.find(x=>x.id===selectedMeasureId);
+  if(!rec||!m) return;
 
-  async function selectMeasure(id,play=false){
-    selectedMeasureId=id;
-    renderMeasures();
-    $("recordBtn").disabled=false;
-    $("playRefBtn").disabled=false;
-    await renderRecordings();
-    if(play){
-      const m=currentSong.measures.find(x=>x.id===id);
-      seekPlay(Number(m.start));
-    }
-  }
-
-  async function deleteMeasure(id){
-    if(!currentSong)return;
-    currentSong.measures=(currentSong.measures||[]).filter(m=>m.id!==id);
-    currentSong.updatedAt=Date.now();
-    if(selectedMeasureId===id) selectedMeasureId=null;
-    await put(SONGS,currentSong); await refreshSongs(); renderMeasures(); await renderRecordings();
-  }
-
-  async function renderRecordings(){
-    const box=$("recordings"); box.innerHTML="";
-    if(!currentSong){return}
-    const all=await getAll(RECS);
-    const arr=all.filter(r=>r.songId===currentSong.id && (!selectedMeasureId || r.measureId===selectedMeasureId))
-                 .sort((a,b)=>b.createdAt-a.createdAt);
-    if(!arr.length){ box.innerHTML='<div class="small">이 구간의 녹음이 아직 없습니다.</div>'; return; }
-    arr.forEach((r,i)=>{
-      const url=URL.createObjectURL(r.blob);
-      const el=document.createElement("div"); el.className="rec";
-      el.innerHTML=`<div class="row" style="justify-content:space-between"><b>Take ${arr.length-i}</b><button class="danger" data-id="${r.id}">삭제</button></div>
-        <div class="small">${new Date(r.createdAt).toLocaleString()}</div>`;
-      const audio=document.createElement("audio"); audio.controls=true; audio.src=url;
-      audio.addEventListener("ended",()=>{});
-      el.appendChild(audio);
-      el.querySelector("[data-id]").addEventListener("click",async()=>{URL.revokeObjectURL(url);await del(RECS,r.id);renderRecordings();});
-      box.appendChild(el);
-    });
-  }
-
-  async function startRecording(){
-    if(!selectedMeasureId){ alert("먼저 마디를 선택하세요."); return; }
-    try{
-      const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-      recChunks=[];
-      mediaRecorder=new MediaRecorder(stream);
-      mediaRecorder.ondataavailable=e=>{ if(e.data.size) recChunks.push(e.data); };
-      mediaRecorder.onstop=async()=>{
-        const blob=new Blob(recChunks,{type:mediaRecorder.mimeType||"audio/webm"});
-        await put(RECS,{id:uid(),songId:currentSong.id,measureId:selectedMeasureId,createdAt:Date.now(),blob});
-        stream.getTracks().forEach(t=>t.stop());
-        $("recordBtn").disabled=false; $("stopRecordBtn").disabled=true;
-        setStatus($("recordStatus"),"녹음 저장됨",true);
-        renderRecordings();
-      };
-      mediaRecorder.start();
-      $("recordBtn").disabled=true; $("stopRecordBtn").disabled=false;
-      setStatus($("recordStatus"),"녹음 중… 피아노를 연주하세요.");
-    }catch(e){
-      setStatus($("recordStatus"),"마이크 권한을 사용할 수 없습니다. HTTPS/권한 설정을 확인하세요.");
-    }
-  }
-
-  function stopRecording(){
-    if(mediaRecorder && mediaRecorder.state!=="inactive") mediaRecorder.stop();
-  }
-
-  async function saveMeasure(){
-    if(!currentSong)return;
-    const st=parseFloat($("startSec").value), en=parseFloat($("endSec").value);
-    if(!Number.isFinite(st)||!Number.isFinite(en)||en<=st){ alert("시작/끝 시간을 올바르게 입력하세요."); return; }
-    currentSong.measures=currentSong.measures||[];
-    currentSong.measures.push({id:uid(),name:$("measureName").value.trim()||`${currentSong.measures.length+1}마디`,start:st,end:en});
-    currentSong.updatedAt=Date.now();
-    await put(SONGS,currentSong);
-    $("measureName").value=""; $("startSec").value=""; $("endSec").value="";
-    await refreshSongs(); renderMeasures();
-  }
-
-  async function analyze(){
-    if(!currentSong)return;
-    const key=$("apiKey").value.trim();
-    if(!key){ setStatus($("analysisStatus"),"Gemini API key를 입력하세요."); return; }
-    const m=(currentSong.measures||[]).find(x=>x.id===selectedMeasureId);
-    const prompt = `너는 피아노 연습 코치다. 아래 정보를 바탕으로, 확인할 수 없는 악보 세부사항은 사실처럼 단정하지 말고 일반적인 해석/연습 방향을 제안하라.
-
-곡 제목: ${currentSong.title}
-작곡가: ${currentSong.composer||"미입력"}
-학습자 수준: ${$("level").value}
-연습 메모: ${currentSong.notes||"없음"}
-선택 구간: ${m ? `${m.name}, 영상 ${m.start.toFixed(1)}초~${m.end.toFixed(1)}초` : "곡 전체"}
-사용자 질문: ${$("analysisQuestion").value.trim()||"곡의 성격, 프레이징, 리듬/밸런스, 페달링, 효율적인 연습법을 알려줘."}
-
-한국어로 다음 순서로 간결하고 실용적으로 답해라.
-1) 곡/구간의 음악적 포인트
-2) 소리와 프레이징
-3) 리듬·밸런스·페달링 주의점
-4) 10분 연습 루틴
-5) 스스로 확인할 체크포인트 3개
-정확한 판본/악보가 필요한 내용은 '악보 확인 필요'라고 표시하라.`;
-    $("analyzeBtn").disabled=true;
-    setStatus($("analysisStatus"),"AI 분석 중…");
-    try{
-      const res=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",{
-        method:"POST",
-        headers:{"Content-Type":"application/json","x-goog-api-key":key},
-        body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})
-      });
-      const data=await res.json();
-      if(!res.ok) throw new Error(data?.error?.message||"API 오류");
-      const text=data?.candidates?.[0]?.content?.parts?.map(p=>p.text||"").join("")||"응답이 비어 있습니다.";
-      currentSong.analysis=text; currentSong.updatedAt=Date.now();
-      await put(SONGS,currentSong); await refreshSongs();
-      $("analysisBox").textContent=text;
-      setStatus($("analysisStatus"),"분석 저장됨",true);
-    }catch(e){
-      setStatus($("analysisStatus"),"분석 실패: "+e.message);
-    }finally{$("analyzeBtn").disabled=false}
-  }
-
-  async function exportMetadata(){
-    const all=await getAll(SONGS);
-    const slim=all.map(({mediaBlob,...s})=>s);
-    const payload={app:"Piano Loop Coach V1",exportedAt:new Date().toISOString(),songs:slim};
-    const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
-    const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
-    a.download="piano-loop-coach-backup.json"; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-  }
-
-  async function importMetadata(file){
-    try{
-      const obj=JSON.parse(await file.text());
-      if(!Array.isArray(obj.songs)) throw new Error("올바른 백업 파일이 아닙니다.");
-      for(const incoming of obj.songs){
-        const existing=(await getAll(SONGS)).find(s=>s.id===incoming.id);
-        if(existing?.mediaBlob) incoming.mediaBlob=existing.mediaBlob;
-        await put(SONGS,incoming);
-      }
-      await refreshSongs();
-      setStatus($("libraryStatus"),"백업 복원 완료",true);
-    }catch(e){ setStatus($("libraryStatus"),"복원 실패: "+e.message); }
-  }
-
-  async function requestPersist(){
-    if(!navigator.storage?.persist){ setStatus($("libraryStatus"),"이 브라우저는 저장 보호 요청을 지원하지 않습니다."); return; }
-    const granted=await navigator.storage.persist();
-    setStatus($("libraryStatus"),granted?"브라우저가 이 앱의 저장 데이터를 보호하도록 설정했습니다.":"저장 보호가 허용되지 않았습니다.",granted);
-  }
-
-  $("tabYoutube").addEventListener("click",()=>{$("tabYoutube").classList.add("active");$("tabLocal").classList.remove("active");$("youtubeForm").classList.remove("hidden");$("localForm").classList.add("hidden")});
-  $("tabLocal").addEventListener("click",()=>{$("tabLocal").classList.add("active");$("tabYoutube").classList.remove("active");$("localForm").classList.remove("hidden");$("youtubeForm").classList.add("hidden")});
-
-  $("addYoutube").addEventListener("click",async()=>{
-    const id=youtubeId($("ytUrl").value.trim());
-    if(!id||!$("ytTitle").value.trim()){ alert("곡 제목과 올바른 YouTube 링크를 입력하세요."); return; }
-    const s={id:uid(),title:$("ytTitle").value.trim(),composer:$("ytComposer").value.trim(),notes:$("ytNotes").value.trim(),source:"youtube",youtubeId:id,measures:[],createdAt:Date.now(),updatedAt:Date.now()};
-    await put(SONGS,s); ["ytTitle","ytComposer","ytUrl","ytNotes"].forEach(x=>$(x).value=""); await refreshSongs(); selectSong(s.id);
+  abMode=true;
+  $("recordStatus").textContent="A/B 비교: 원본 재생 중";
+  playReferenceOnce(async()=>{
+    if(!abMode) return;
+    $("recordStatus").textContent="A/B 비교: 내 연주 재생 중";
+    await new Promise(r=>setTimeout(r,600));
+    const url=URL.createObjectURL(rec.blob);
+    const a=new Audio(url);
+    a.onended=()=>{
+      URL.revokeObjectURL(url);
+      $("recordStatus").textContent="A/B 비교 완료";
+      abMode=false;
+    };
+    a.play();
   });
+}
 
-  $("addLocal").addEventListener("click",async()=>{
-    const file=$("localFile").files[0];
-    if(!file||!$("localTitle").value.trim()){ alert("곡 제목과 파일을 선택하세요."); return; }
-    const s={id:uid(),title:$("localTitle").value.trim(),composer:$("localComposer").value.trim(),notes:$("localNotes").value.trim(),source:"local",mediaType:file.type,mediaName:file.name,mediaBlob:file,measures:[],createdAt:Date.now(),updatedAt:Date.now()};
-    await put(SONGS,s); ["localTitle","localComposer","localNotes"].forEach(x=>$(x).value=""); $("localFile").value=""; await refreshSongs(); selectSong(s.id);
+async function requestPersistence() {
+  if (!navigator.storage?.persist) {
+    $("libraryStatus").textContent="이 브라우저에서는 저장 보호 요청을 지원하지 않습니다.";
+    return;
+  }
+  const granted=await navigator.storage.persist();
+  $("libraryStatus").textContent=granted ? "저장 보호 요청이 허용되었습니다." : "저장 보호가 허용되지 않았습니다.";
+}
+
+async function exportBackup() {
+  const songData = await getAll(SONGS);
+  const recData = await getAll(RECS);
+
+  const recsSerialized = [];
+  for (const r of recData) {
+    const base64 = await blobToDataURL(r.blob);
+    recsSerialized.push({...r, blobDataUrl:base64, blob:undefined});
+  }
+
+  const payload={
+    app:"Piano Loop Coach V1.1",
+    exportedAt:new Date().toISOString(),
+    songs:songData,
+    recordings:recsSerialized
+  };
+
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="piano-loop-coach-v11-backup.json";
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function blobToDataURL(blob) {
+  return new Promise((resolve,reject)=>{
+    const fr=new FileReader();
+    fr.onload=()=>resolve(fr.result);
+    fr.onerror=()=>reject(fr.error);
+    fr.readAsDataURL(blob);
   });
+}
 
-  $("deleteSong").addEventListener("click",async()=>{
-    if(!currentSong || !confirm(`"${currentSong.title}"을 보관함에서 삭제할까요?`)) return;
-    const all=await getAll(RECS); for(const r of all.filter(x=>x.songId===currentSong.id)) await del(RECS,r.id);
-    await del(SONGS,currentSong.id); currentSong=null; selectedMeasureId=null; cleanupMedia(); await refreshSongs();
-    $("currentTitle").textContent="곡을 선택하세요"; $("currentMeta").textContent=""; $("mediaBox").textContent="보관함에서 곡을 선택하세요";
-    ["deleteSong","saveMeasure","analyzeBtn","playPause","markStart","markEnd","recordBtn","playRefBtn"].forEach(x=>$(x).disabled=true);
-    renderMeasures(); renderRecordings();
+async function dataURLToBlob(dataUrl) {
+  const res=await fetch(dataUrl);
+  return await res.blob();
+}
+
+async function importBackup(file) {
+  try {
+    const obj=JSON.parse(await file.text());
+    if(!Array.isArray(obj.songs)) throw new Error("올바른 백업 파일이 아닙니다.");
+
+    for(const s of obj.songs) await put(SONGS,s);
+
+    if(Array.isArray(obj.recordings)) {
+      for(const r of obj.recordings) {
+        if(!r.blobDataUrl) continue;
+        const blob=await dataURLToBlob(r.blobDataUrl);
+        const rec={...r,blob};
+        delete rec.blobDataUrl;
+        await put(RECS,rec);
+      }
+    }
+
+    await refreshSongs();
+    $("libraryStatus").textContent="백업 복원 완료";
+  } catch(e) {
+    $("libraryStatus").textContent="복원 실패: "+e.message;
+  }
+}
+
+$("addSong").addEventListener("click",async()=>{
+  const title=$("songTitle").value.trim();
+  const id=youtubeId($("youtubeUrl").value.trim());
+
+  if(!title||!id) {
+    alert("곡 제목과 올바른 YouTube 링크를 입력해 주세요.");
+    return;
+  }
+
+  const s={
+    id:uid(),
+    title,
+    composer:$("composer").value.trim(),
+    notes:$("notes").value.trim(),
+    youtubeId:id,
+    measures:[],
+    createdAt:Date.now(),
+    updatedAt:Date.now()
+  };
+
+  await put(SONGS,s);
+  ["songTitle","composer","youtubeUrl","notes"].forEach(id=>$(id).value="");
+  await refreshSongs();
+  selectSong(s.id);
+});
+
+$("deleteSong").addEventListener("click",async()=>{
+  if(!currentSong) return;
+  if(!confirm(`"${currentSong.title}"을 삭제할까요?`)) return;
+
+  const all=await getAll(RECS);
+  for(const r of all.filter(x=>x.songId===currentSong.id)) await del(RECS,r.id);
+  await del(SONGS,currentSong.id);
+
+  currentSong=null;
+  selectedMeasureId=null;
+  selectedRecordingId=null;
+  looping=false;
+  clearInterval(ticker);
+  clearTimeout(abEndTimer);
+
+  $("currentTitle").textContent="곡을 선택하세요";
+  $("currentMeta").textContent="";
+  $("videoBox").textContent="곡을 선택하세요";
+  ["deleteSong","playPause","markStart","markEnd","saveMeasure","recordBtn","playReferenceBtn","playMyTakeBtn","abBtn"].forEach(id=>$(id).disabled=true);
+
+  await refreshSongs();
+  renderMeasures();
+  renderRecordings();
+});
+
+$("playPause").addEventListener("click",()=>{
+  if(!ytReady)return;
+  looping=false;
+  ytPlayer.getPlayerState()===1 ? pauseYT() : playYT();
+});
+
+$("markStart").addEventListener("click",()=>{
+  $("startSec").value=currentTime().toFixed(1);
+});
+
+$("markEnd").addEventListener("click",()=>{
+  $("endSec").value=currentTime().toFixed(1);
+});
+
+$("saveMeasure").addEventListener("click",async()=>{
+  if(!currentSong)return;
+
+  const start=Number($("startSec").value);
+  const end=Number($("endSec").value);
+
+  if(!Number.isFinite(start)||!Number.isFinite(end)||end<=start) {
+    alert("끝 시간은 시작 시간보다 커야 합니다.");
+    return;
+  }
+
+  currentSong.measures=currentSong.measures||[];
+  currentSong.measures.push({
+    id:uid(),
+    name:$("measureName").value.trim() || `${currentSong.measures.length+1}마디`,
+    start,
+    end
   });
+  currentSong.updatedAt=Date.now();
 
-  $("playPause").addEventListener("click",playPause);
-  $("markStart").addEventListener("click",()=>{$("startSec").value=getCurrentTime().toFixed(1)});
-  $("markEnd").addEventListener("click",()=>{$("endSec").value=getCurrentTime().toFixed(1)});
-  $("saveMeasure").addEventListener("click",saveMeasure);
-  $("recordBtn").addEventListener("click",startRecording);
-  $("stopRecordBtn").addEventListener("click",stopRecording);
-  $("playRefBtn").addEventListener("click",()=>{const m=currentSong?.measures?.find(x=>x.id===selectedMeasureId);if(m)seekPlay(m.start)});
-  $("analyzeBtn").addEventListener("click",analyze);
-  $("exportBtn").addEventListener("click",exportMetadata);
-  $("importBtn").addEventListener("click",()=>$("importFile").click());
-  $("importFile").addEventListener("change",e=>{if(e.target.files[0])importMetadata(e.target.files[0])});
-  $("persistBtn").addEventListener("click",requestPersist);
+  await put(SONGS,currentSong);
+  $("measureName").value="";
+  $("startSec").value="";
+  $("endSec").value="";
+  await refreshSongs();
+  renderMeasures();
+});
 
-  (async()=>{
-    try{
-      db=await openDB(); await refreshSongs();
-      setStatus($("libraryStatus"),"브라우저 저장소 준비됨",true);
-    }catch(e){ setStatus($("libraryStatus"),"저장소 초기화 실패: "+e.message); }
-  })();
+$("recordBtn").addEventListener("click",startRecording);
+$("stopRecordBtn").addEventListener("click",stopRecording);
+$("playReferenceBtn").addEventListener("click",()=>playReferenceOnce());
+$("playMyTakeBtn").addEventListener("click",playMyTake);
+$("abBtn").addEventListener("click",playAB);
+$("persistBtn").addEventListener("click",requestPersistence);
+$("exportBtn").addEventListener("click",exportBackup);
+$("importBtn").addEventListener("click",()=>$("importFile").click());
+$("importFile").addEventListener("change",e=>{
+  if(e.target.files[0]) importBackup(e.target.files[0]);
+});
+
+(async()=>{
+  try{
+    db=await openDB();
+    await refreshSongs();
+    $("libraryStatus").textContent="저장소 준비 완료";
+  }catch(e){
+    $("libraryStatus").textContent="저장소 초기화 실패: "+e.message;
+  }
+})();
 })();
 </script>
 </body>
